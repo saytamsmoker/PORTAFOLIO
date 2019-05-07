@@ -11,4 +11,29 @@ package Modelo;
  */
 public class Familia {
     
+    public int id_familia;
+    public String nombre_familia;
+
+    public int getId_familia() {
+        return id_familia;
+    }
+
+    public void setId_familia(int id_familia) {
+        this.id_familia = id_familia;
+    }
+
+    public String getNombre_familia() {
+        return nombre_familia;
+    }
+
+    public void setNombre_familia(String nombre_familia) {
+        this.nombre_familia = nombre_familia;
+    }
+
+    public Familia(int id_familia, String nombre_familia) {
+        this.id_familia = id_familia;
+        this.nombre_familia = nombre_familia;
+    }
+    
+    
 }
