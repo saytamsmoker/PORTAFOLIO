@@ -19,8 +19,9 @@ public class Producto {
     public String fecha_venc;                  
     public int familia_id_familia;           
     public int tipo_producto_id_tipoprod;   
+    public int estado;
 
-    public Producto(String id_producto, String desc_producto, int precio_unitario, int precio_compra, int stock, int stock_critico, String fecha_venc, int familia_id_familia, int tipo_producto_id_tipoprod) {
+    public Producto(String id_producto, String desc_producto, int precio_unitario, int precio_compra, int stock, int stock_critico, String fecha_venc, int familia_id_familia, int tipo_producto_id_tipoprod, int estado) {
         this.id_producto = id_producto;
         this.desc_producto = desc_producto;
         this.precio_unitario = precio_unitario;
@@ -30,6 +31,7 @@ public class Producto {
         this.fecha_venc = fecha_venc;
         this.familia_id_familia = familia_id_familia;
         this.tipo_producto_id_tipoprod = tipo_producto_id_tipoprod;
+        this.estado = estado;
     }
 
     public String getId_producto() {
@@ -103,7 +105,13 @@ public class Producto {
     public void setTipo_producto_id_tipoprod(int tipo_producto_id_tipoprod) {
         this.tipo_producto_id_tipoprod = tipo_producto_id_tipoprod;
     }
-    
-    
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
     
 }
