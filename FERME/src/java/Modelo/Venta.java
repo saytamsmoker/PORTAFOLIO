@@ -15,12 +15,14 @@ public class Venta {
     public String fecha_boleta;
     public int total_venta;
     public int tipo_venta_id_tipoventa;
+    public int estado;
 
-    public Venta(int id_boleta, String fecha_boleta, int total_venta, int tipo_venta_id_tipoventa) {
+    public Venta(int id_boleta, String fecha_boleta, int total_venta, int tipo_venta_id_tipoventa, int estado) {
         this.id_boleta = id_boleta;
         this.fecha_boleta = fecha_boleta;
         this.total_venta = total_venta;
         this.tipo_venta_id_tipoventa = tipo_venta_id_tipoventa;
+        this.estado = estado;
     }
 
     public int getId_boleta() {
@@ -54,6 +56,15 @@ public class Venta {
     public void setTipo_venta_id_tipoventa(int tipo_venta_id_tipoventa) {
         this.tipo_venta_id_tipoventa = tipo_venta_id_tipoventa;
     }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+    
     
     
 }
