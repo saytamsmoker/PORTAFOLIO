@@ -1,0 +1,256 @@
+CREATE TABLE familia (
+    id_familia       INTEGER NOT NULL,
+    nombre_familia   VARCHAR(30) NOT NULL
+);
+
+
+ALTER TABLE familia ADD CONSTRAINT familia_pk PRIMARY KEY ( id_familia );
+
+CREATE TABLE oc_prod (
+    producto_id_producto    VARCHAR(17) NOT NULL,
+    orden_compra_id_orden   INTEGER NOT NULL
+);
+
+ALTER TABLE oc_prod ADD CONSTRAINT oc_prod_pk PRIMARY KEY ( orden_compra_id_orden,
+                                                            producto_id_producto );
+
+CREATE TABLE orden_compra (
+    id_orden         INTEGER NOT NULL,
+    fecha_creacion   TIMESTAMP NOT NULL,
+    total_compra     INTEGER NOT NULL,
+    estado           INTEGER NOT NULL
+);
+
+
+ALTER TABLE orden_compra ADD CONSTRAINT orden_compra_pk PRIMARY KEY ( id_orden );
+
+CREATE TABLE perfil (
+    id_perf                  INTEGER NOT NULL,
+    usuario_rut_user         INTEGER NOT NULL,
+    rol_id_rol               INTEGER NOT NULL,
+    estado                   INTEGER NOT NULL,
+    usuario_rubro_id_rubro   INTEGER NOT NULL
+);
+
+
+ALTER TABLE perfil ADD CONSTRAINT perfil_pk PRIMARY KEY ( id_perf );
+
+CREATE TABLE perfil_oc (
+    perfil_id_perf          INTEGER NOT NULL,
+    orden_compra_id_orden   INTEGER NOT NULL
+);
+
+ALTER TABLE perfil_oc ADD CONSTRAINT perfil_oc_pk PRIMARY KEY ( perfil_id_perf,
+                                                                orden_compra_id_orden );
+
+    CREATE TABLE perfil_prod (
+    perfil_id_perf         INTEGER NOT NULL,
+    producto_id_producto   VARCHAR(17) NOT NULL
+);
+
+ALTER TABLE perfil_prod ADD CONSTRAINT perfil_prod_pk PRIMARY KEY ( perfil_id_perf );
+
+CREATE TABLE perfil_venta (
+    perfil_id_perf    INTEGER NOT NULL,
+    venta_id_boleta   INTEGER NOT NULL
+);
+
+ALTER TABLE perfil_venta ADD CONSTRAINT perfil_venta_pk PRIMARY KEY ( perfil_id_perf,
+                                                                      venta_id_boleta );
+
+CREATE TABLE producto (
+    id_producto                 VARCHAR(17) NOT NULL,
+    desc_producto               VARCHAR(200) NOT NULL,
+    precio_unitario             INTEGER NOT NULL,
+    precio_compra               INTEGER NOT NULL,
+    stock                       INTEGER NOT NULL,
+    stock_critico               INTEGER NOT NULL,
+    fecha_venc                  INTEGER,
+    familia_id_familia          INTEGER NOT NULL,
+    tipo_producto_id_tipoprod   INTEGER NOT NULL,
+    estado                      INTEGER NOT NULL
+);
+
+
+
+ALTER TABLE producto ADD CONSTRAINT producto_pk PRIMARY KEY ( id_producto );
+
+CREATE TABLE recepcion_oc (
+    id_recepcion            INTEGER NOT NULL,
+    fecha_recepcion         TIMESTAMP NOT NULL,
+    orden_compra_id_orden   INTEGER NOT NULL
+);
+
+
+CREATE UNIQUE INDEX recepcion_oc__idx ON
+    recepcion_oc (
+        orden_compra_id_orden
+    ASC );
+
+ALTER TABLE recepcion_oc ADD CONSTRAINT recepcion_oc_pk PRIMARY KEY ( id_recepcion );
+
+CREATE TABLE reportes (
+    id_reporte             INTEGER NOT NULL,
+    contenido_reporte      BLOB NOT NULL,
+    fecha_reporte          TIMESTAMP NOT NULL,
+    perfil_id_perf         INTEGER NOT NULL,
+    tipo_reporte_id_trep   INTEGER NOT NULL
+);
+
+ALTER TABLE reportes ADD CONSTRAINT reportes_pk PRIMARY KEY ( id_reporte );
+
+CREATE TABLE rol (
+    id_rol       INTEGER NOT NULL,
+    nombre_rol   VARCHAR(30) NOT NULL,
+    estado       INTEGER NOT NULL
+);
+
+
+ALTER TABLE rol ADD CONSTRAINT rol_pk PRIMARY KEY ( id_rol );
+
+CREATE TABLE rubro (
+    id_rubro       INTEGER NOT NULL,
+    nombre_rubro   VARCHAR(30) NOT NULL
+);
+
+
+
+ALTER TABLE rubro ADD CONSTRAINT rubro_pk PRIMARY KEY ( id_rubro );
+
+CREATE TABLE tipo_producto (
+    id_tipoprod       INTEGER NOT NULL,
+    nombre_tipoprod   VARCHAR(30) NOT NULL
+);
+
+
+
+ALTER TABLE tipo_producto ADD CONSTRAINT tipo_producto_pk PRIMARY KEY ( id_tipoprod );
+
+CREATE TABLE tipo_reporte (
+    id_trep     INTEGER NOT NULL,
+    desc_trep   VARCHAR(50) NOT NULL
+);
+
+
+
+ALTER TABLE tipo_reporte ADD CONSTRAINT tipo_reporte_pk PRIMARY KEY ( id_trep );
+
+CREATE TABLE tipo_venta (
+    id_tipoventa   INTEGER NOT NULL,
+    nombre_tvt     VARCHAR(15) NOT NULL
+);
+
+
+
+ALTER TABLE tipo_venta ADD CONSTRAINT tipo_venta_pk PRIMARY KEY ( id_tipoventa );
+
+CREATE TABLE usuario (
+    rut_user         INTEGER NOT NULL,
+    dv_user          CHAR(1) NOT NULL,
+    nombre_user      VARCHAR(30) NOT NULL,
+    apellido_user    VARCHAR(50),
+    email_user       VARCHAR(50) NOT NULL,
+    contrasena       VARCHAR(12) NOT NULL,
+    direccion_user   VARCHAR(80) NOT NULL,
+    fono_user        VARCHAR(15) NOT NULL,
+    rubro_id_rubro   INTEGER NOT NULL,
+    estado           INTEGER NOT NULL
+);
+
+
+ALTER TABLE usuario ADD CONSTRAINT usuario_pk PRIMARY KEY ( rut_user,
+                                                            rubro_id_rubro );
+
+CREATE TABLE venta (
+    id_boleta                 INTEGER NOT NULL,
+    fecha_boleta              TIMESTAMP NOT NULL,
+    total_venta               INTEGER NOT NULL,
+    tipo_venta_id_tipoventa   INTEGER NOT NULL,
+    estado                    INTEGER NOT NULL
+);
+
+
+ALTER TABLE venta ADD CONSTRAINT venta_pk PRIMARY KEY ( id_boleta );
+
+CREATE TABLE vnt_pro (
+    venta_id_boleta        INTEGER NOT NULL,
+    producto_id_producto   VARCHAR(17) NOT NULL
+);
+
+ALTER TABLE oc_prod
+    ADD CONSTRAINT oc_prod_orden_compra_fk FOREIGN KEY ( orden_compra_id_orden )
+        REFERENCES orden_compra ( id_orden );
+
+ALTER TABLE oc_prod
+    ADD CONSTRAINT oc_prod_producto_fk FOREIGN KEY ( producto_id_producto )
+        REFERENCES producto ( id_producto );
+
+ALTER TABLE perfil_oc
+    ADD CONSTRAINT perfil_oc_orden_compra_fk FOREIGN KEY ( orden_compra_id_orden )
+        REFERENCES orden_compra ( id_orden );
+
+ALTER TABLE perfil_oc
+    ADD CONSTRAINT perfil_oc_perfil_fk FOREIGN KEY ( perfil_id_perf )
+        REFERENCES perfil ( id_perf );
+
+ALTER TABLE perfil_prod
+    ADD CONSTRAINT perfil_prod_perfil_fk FOREIGN KEY ( perfil_id_perf )
+        REFERENCES perfil ( id_perf );
+
+ALTER TABLE perfil_prod
+    ADD CONSTRAINT perfil_prod_producto_fk FOREIGN KEY ( producto_id_producto )
+        REFERENCES producto ( id_producto );
+
+ALTER TABLE perfil
+    ADD CONSTRAINT perfil_rol_fk FOREIGN KEY ( rol_id_rol )
+        REFERENCES rol ( id_rol );
+
+ALTER TABLE perfil
+    ADD CONSTRAINT perfil_usuario_fk FOREIGN KEY ( usuario_rut_user,
+                                                   usuario_rubro_id_rubro )
+        REFERENCES usuario ( rut_user,
+                             rubro_id_rubro );
+
+ALTER TABLE perfil_venta
+    ADD CONSTRAINT perfil_venta_perfil_fk FOREIGN KEY ( perfil_id_perf )
+        REFERENCES perfil ( id_perf );
+
+ALTER TABLE perfil_venta
+    ADD CONSTRAINT perfil_venta_venta_fk FOREIGN KEY ( venta_id_boleta )
+        REFERENCES venta ( id_boleta );
+
+ALTER TABLE producto
+    ADD CONSTRAINT producto_familia_fk FOREIGN KEY ( familia_id_familia )
+        REFERENCES familia ( id_familia );
+
+ALTER TABLE producto
+    ADD CONSTRAINT producto_tipo_producto_fk FOREIGN KEY ( tipo_producto_id_tipoprod )
+        REFERENCES tipo_producto ( id_tipoprod );
+
+ALTER TABLE recepcion_oc
+    ADD CONSTRAINT recepcion_oc_orden_compra_fk FOREIGN KEY ( orden_compra_id_orden )
+        REFERENCES orden_compra ( id_orden );
+
+ALTER TABLE reportes
+    ADD CONSTRAINT reportes_perfil_fk FOREIGN KEY ( perfil_id_perf )
+        REFERENCES perfil ( id_perf );
+
+ALTER TABLE reportes
+    ADD CONSTRAINT reportes_tipo_reporte_fk FOREIGN KEY ( tipo_reporte_id_trep )
+        REFERENCES tipo_reporte ( id_trep );
+
+ALTER TABLE usuario
+    ADD CONSTRAINT usuario_rubro_fk FOREIGN KEY ( rubro_id_rubro )
+        REFERENCES rubro ( id_rubro );
+
+ALTER TABLE venta
+    ADD CONSTRAINT venta_tipo_venta_fk FOREIGN KEY ( tipo_venta_id_tipoventa )
+        REFERENCES tipo_venta ( id_tipoventa );
+
+ALTER TABLE vnt_pro
+    ADD CONSTRAINT vnt_pro_producto_fk FOREIGN KEY ( producto_id_producto )
+        REFERENCES producto ( id_producto );
+
+ALTER TABLE vnt_pro
+    ADD CONSTRAINT vnt_pro_venta_fk FOREIGN KEY ( venta_id_boleta )
+        REFERENCES venta ( id_boleta );
